@@ -23,7 +23,6 @@ const skm::menu_item* skm::exit(const menu_item* current) {
 }
 
 const skm::menu_item* skm::spbu(const menu_item* current) {
-    //TODO
     std::cout << current->title << std::endl << std::endl;
     return current->parent;
 }
@@ -44,6 +43,26 @@ const skm::menu_item* skm::lei(const menu_item* current) {
 }
 
 const skm::menu_item* skm::universities_go_back(const menu_item* current) {
+    std::cout << current->title << std::endl << std::endl;
+    return current->parent->parent;
+}
+
+const skm::menu_item* skm::pmpu(const menu_item* current) {
+    std::cout << current->title << std::endl << std::endl;
+    return current->parent;
+}
+
+const skm::menu_item* skm::math(const menu_item* current) {
+    std::cout << current->title << std::endl << std::endl;
+    return current->parent;
+}
+
+const skm::menu_item* skm::lang(const menu_item* current) {
+    std::cout << current->title << std::endl << std::endl;
+    return current->parent;
+}
+
+const skm::menu_item* skm::spbu_go_back(const menu_item* current) {
     std::cout << current->title << std::endl << std::endl;
     return current->parent->parent;
 }
