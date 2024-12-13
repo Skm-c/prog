@@ -7,6 +7,7 @@ namespace skm {
 
     extern const menu_item UNIVERSITIES;
     extern const menu_item EXIT;
+    extern const menu_item GO_BACK;
 
     extern const menu_item SPBU;
     extern const menu_item ITMO;

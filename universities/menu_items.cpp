@@ -15,7 +15,7 @@ const skm::menu_item skm::LANG = {
     "3 - Лингвистический факультет ", skm::lang, &skm::SPBU
 };
 const skm::menu_item skm::SPBU_GO_BACK = {
-    "0 - Выйти в предыдущее", skm::spbu_go_back, &skm::SPBU
+    "0 - Выйти в предыдущее", skm::go_back, &skm::SPBU
 };
 
 namespace{
@@ -41,7 +41,7 @@ const skm::menu_item skm::LEI = {
     "4 - ЛЭТИ", skm::lei, &skm::UNIVERSITIES
 };
 const skm::menu_item skm::UNIVERSITIES_GO_BACK= {
-    "0 - Выйти в главное меню", skm::universities_go_back, &skm::UNIVERSITIES
+    "0 - Выйти в главное меню", skm::go_back, &skm::UNIVERSITIES
 };
 
 namespace{
