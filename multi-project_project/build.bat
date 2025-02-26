@@ -16,3 +16,4 @@ cmake -G %BUILD_TYPE% ..\%SOURCE_FOLDER%
 cmake --build .
 
 copy ..\%SOURCE_FOLDER%\universities\build_run.bat .\universities
+copy ..\%SOURCE_FOLDER%\sort\build_run.bat .\sort
