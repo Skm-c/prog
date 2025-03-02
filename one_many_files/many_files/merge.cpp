@@ -1,5 +1,5 @@
 #include "merge.hpp"
-
+#include <iostream>
 void biv::mer::merge(std::vector<int>& A, int p, int q, int r){
     int n1 = q - p + 1;
     int n2 = r - q;
