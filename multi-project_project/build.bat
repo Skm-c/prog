@@ -19,4 +19,5 @@ cmake --build .
 copy ..\%SOURCE_FOLDER%\universities\build_run.bat .\universities
 copy ..\%SOURCE_FOLDER%\merge_sort\build_run.bat .\merge_sort
 
+
 copy ..\run_tests.bat .
