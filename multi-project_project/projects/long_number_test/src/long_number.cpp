@@ -143,81 +143,88 @@ LongNumber LongNumber::operator - () const {
     LongNumber res; 
     res.sign = -sign; 
     res.length = length;
-    res.numbers = numbers;
+    res.numbers = new int[length];
+	for (size_t i = 0; i < length; i++) {
+		res.numbers[i] = numbers[i];
+	}
 
     return res; 
 }
 
 LongNumber LongNumber::operator + (const LongNumber& x) const {
-	if (sign != x.sign) {
-        if (sign == -1) {
-            return x - (-(*this)); 
-        } else {
-            return *this - (-x);    
-        }
-    }
-	
+	std::cout << length << ' ' << x.length << std::endl;
+	if (sign == x.sign) {       
+		long maxLen = std::max(length, x.length);
 
-	long maxLen = std::max(length, x.length);
-	
-	int* numbers1 = new int[maxLen]{};  
-	int* numbers2 = new int[maxLen]{};
+		int* numbers1 = new int[maxLen]{};  
+		int* numbers2 = new int[maxLen]{};
 
-	for (size_t i = 0; i < length; ++i) {
-		numbers1[maxLen - length + i] = numbers[i];
-	}
-	for (size_t i = 0; i < x.length; ++i) {
-		numbers2[maxLen - x.length + i] = x.numbers[i];
-	}
-	
-	LongNumber res;
-	res.sign = sign;
-	size_t len = maxLen + 1;
-	res.length = len;
-	res.numbers = new int[len]{};
-	
-	for (size_t l = 0; l < maxLen; l++){
-		res.numbers[l + 1] = numbers1[l] + numbers2[l];
-	}
-	
-	for (size_t l = len - 1; l > 0; l--){
-		res.numbers[l - 1] += res.numbers[l] / 10;
-		res.numbers[l] %= 10;
-	}
-	
-	
-	if (res.numbers[0] == 0){
-		LongNumber res2;
-		res2.sign = sign;
-		res2.length = maxLen;
-		res2.numbers = new int[maxLen]{};
-		for (size_t l = 0; l < len - 1; l++){
-			res2.numbers[l] = res.numbers[l + 1];
+		for (size_t i = 0; i < length; ++i) {
+			numbers1[maxLen - length + i] = numbers[i];
 		}
-		
-		delete[] res.numbers;
+		for (size_t i = 0; i < x.length; ++i) {
+			numbers2[maxLen - x.length + i] = x.numbers[i];
+		}
+
+		LongNumber res;
+		res.sign = sign;
+		size_t len = maxLen + 1;
+		res.length = len;
+		res.numbers = new int[len]{};
+
+		for (size_t l = 0; l < maxLen; l++){
+			res.numbers[l + 1] = numbers1[l] + numbers2[l];
+		}
+
+		for (size_t l = len - 1; l > 0; l--){
+			res.numbers[l - 1] += res.numbers[l] / 10;
+			res.numbers[l] %= 10;
+		}
+
+
+		if (res.numbers[0] == 0){
+			LongNumber res2;
+			res2.sign = sign;
+			res2.length = maxLen;
+			res2.numbers = new int[maxLen]{};
+			for (size_t l = 0; l < len - 1; l++){
+				res2.numbers[l] = res.numbers[l + 1];
+			}
+			
+			delete[] numbers1;
+			delete[] numbers2;
+			
+			return res2;
+		}
+
 		delete[] numbers1;
 		delete[] numbers2;
-		
-		return res2;
+
+		return res;
+	}	
+	
+	if (sign == -1) {
+			std::cout << numbers[0] << ' ' << x.numbers[0] <<std::endl;
+			LongNumber tmp = *this;
+			tmp.sign = -tmp.sign;		
+            return x - tmp;
 	}
-	
-	delete[] numbers1;
-	delete[] numbers2;
-	
-	return res;
-	
+	std::cout << numbers[0] << ' ' << x.numbers[0] <<std::endl;	
+	LongNumber tmp = x;
+	tmp.sign = -tmp.sign;	
+	return *this - tmp;   
 }
 
 LongNumber LongNumber::operator - (const LongNumber& x) const {
 	if (sign == 1 && x.sign == 1){
-		long maxLen = std::max(length, x.length);
 		
+		
+		size_t maxLen = std::max(length, x.length);
+		/*
 		//adding zeros to the beginning of 1 array
-		int* numbers1;
+		int* numbers1 = new int[maxLen]{};
 		int i = 0;
-		while (length + i != maxLen){
-			numbers1 = new int[i + length]{};
+		while (length + i != maxLen){			
 			i++;
 		}
 		for (size_t j = i; j < length + i; j++){
@@ -225,15 +232,15 @@ LongNumber LongNumber::operator - (const LongNumber& x) const {
 		}
 		
 		//adding zeros to the beginning of 2 array
-		int* numbers2;
+		int* numbers2 = new int[maxLen]{};
 		i = 0;
 		while (x.length + i != maxLen){
-			numbers2 = new int[i + x.length]{};
 			i++;
 		}
 		for (size_t j = i; j < x.length + i; j++){
 			numbers2[j] = x.numbers[j - i];
 		}
+		std::cout << numbers1[0] << numbers1[1] << ' ' << numbers2[0] << numbers2[1] << std::endl;
 		
 		bool flag;
 		if (*this > x || *this == x){
@@ -242,20 +249,26 @@ LongNumber LongNumber::operator - (const LongNumber& x) const {
 			flag = false;
 		}
 		
+		
 		LongNumber res;
 		if (flag){
-			res.sign = 1;
+			res.sign = sign;
 		} else {
-			res.sign = -1;
+			res.sign = -sign;
 		}
+		*/
+		LongNumber res;
+		res.sign = sign;
 		size_t len = maxLen + 1;
 		res.length = len;
 		res.numbers = new int[len]{};
-		
-		for (size_t l = 0; l < len; l++){
+		/*
+		for (size_t l = 0; l < maxLen; l++){
 			if (flag){
+				//res.numbers[l + 1] = numbers[l] - x.numbers[l];
 				res.numbers[l + 1] = numbers1[l] - numbers2[l];
 			} else {
+				//res.numbers[l + 1] = x.numbers[l] - numbers[l];
 				res.numbers[l + 1] = numbers2[l] - numbers1[l];
 			}
 		}
@@ -266,29 +279,55 @@ LongNumber LongNumber::operator - (const LongNumber& x) const {
 				res.numbers[l - 1]--;
 			}
 		}
-		
+		*/
+		std::cout << res.numbers[0] << res.numbers[1] << res.numbers[2]<< std::endl;
 		int p = 0;
+		
 		while (res.numbers[p] == 0){
 			p++;
 		}
+		
+		std::cout << p << std::endl;
+		std::cout << len << std::endl;
 		if (p != 0){
 			LongNumber res2;
 			res2.sign = res.sign;
 			res2.length = len - p;
 			res2.numbers = new int[len - p]{};
-			for (size_t l = 0; l < len - p; l++){
-				res2.numbers[l] = res.numbers[l + p];
+			if (p < len){
+				for (size_t l = 0; l < len - p; l++){
+					res2.numbers[l] = res.numbers[l + p];
+				}
 			}
+			//delete[] numbers1;
+			//delete[] numbers2;
+			delete[] res.numbers; 
+			
+			std::cout << "ready" << std::endl;
 			return res2;
 		}
+		
+		
+		//delete[] numbers1;
+		//numbers1 = nullptr;
+		//delete[] numbers2;
+		//numbers2 = nullptr;
+		delete[] res.numbers; 
 		return res;
-		
-		
+	
 	} else if(sign == -1 && x.sign == -1){
-		return (-x) - (-(*this));
+		LongNumber tmp = *this;
+		tmp.sign = -tmp.sign; 
+		LongNumber tmp2 = x;
+		tmp2.sign = -tmp2.sign; 
+		return tmp2 - tmp;
 	} else {
-		return *this + (-x);
+		LongNumber tmp = x;
+		tmp.sign = -tmp.sign; 
+		return *this + tmp;
 	}
+	
+
 }
 
 LongNumber LongNumber::operator * (const LongNumber& x) const {
@@ -327,6 +366,8 @@ LongNumber LongNumber::operator * (const LongNumber& x) const {
 		for (size_t l = 0; l < len - p; l++){
 			res2.numbers[l] = res.numbers[l + p];
 		}
+		//delete[] res.numbers; with(Exit code 0xc0000374), without(infinity loading)
+		
 		return res2;
 	}
 	return res;
@@ -357,17 +398,17 @@ LongNumber LongNumber::operator / (const LongNumber& x) const {
 	divisor.sign = x.sign;
 	divisor.length = length - j;
 	divisor.numbers = new int[length - j]{};
-	/*
-    for (int k = i; k < length; k++){
-		dividend[k - i] = numbers[k];
-	}
-	LongNumber divisor[length - j];
-    for (int k = j; k < length; k++){
-		divisor[k - j] = numbers[k];
-	}
-	*/
 	
-	if (*this == LongNumber(0)) {
+    for (int k = i; k < length; k++){
+		dividend.numbers[k - i] = numbers[k];
+	}
+	
+    for (int k = j; k < length; k++){
+		divisor.numbers[k - j] = numbers[k];
+	}
+	
+	std::cout << "Проверка 1: numbers = " << numbers << std::endl;
+	if (*this == LongNumber("0")) {
         return LongNumber("0");
     }
 	if (dividend < divisor) {
@@ -382,9 +423,11 @@ LongNumber LongNumber::operator / (const LongNumber& x) const {
 		
     }
 	
-    LongNumber current(0);
+    LongNumber current("0");
 	int count = 0;
+	std::cout << "Проверка 2: numbers = " << numbers << std::endl;
 	for (int k = i; k < dividend.length; k++){
+		std::cout << "Проверка 3s: numbers = " << std::endl;
 		
 		std::string el = std::to_string(dividend.numbers[k]);
 		const char* c_el = el.c_str();
@@ -395,12 +438,15 @@ LongNumber LongNumber::operator / (const LongNumber& x) const {
 		while (current > divisor || current == divisor) {
 			current = current - divisor;
 			res_number++;
+			std::cout << "Проверка 4s: numbers = " << std::endl;
 		}
+		
 		if (res_number != 0){
 			count++;
 		}
 		res.numbers[count] = res_number;
 	}
+	std::cout << "Проверка 3: res.numbers = " << res.numbers << std::endl;
 	/*
 	int el = 0;
 	while (res_numbers[el] != 0){
