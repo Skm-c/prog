@@ -16,11 +16,7 @@ Vector<T>::Vector() {
 
 template<typename T>
 Vector<T>::~Vector() {
-	for (size_t i = size - 1; i >= 0; i--){
-		arr[i].~T();
-	}
-	
-	operator delete(arr);
+	delete[] arr;
 	arr = nullptr;
 	size = 0;
 	capacity = 0;
@@ -43,40 +39,36 @@ bool Vector<T>::has_item(const T& value) const noexcept {
 
 template<typename T>
 bool Vector<T>::insert(const std::size_t position, const T& value) {
-	
 	if (size + 1 > capacity) {
 		if (capacity == 0){
-			capacity = 1;
-		} else {			
-			capacity *= 2;
+		  capacity = 1;
+		} else {      
+		  capacity *= 2;
 		}
 		
-		T* new_arr = static_cast<T*>(operator new(capacity * sizeof(T)));
+		T* new_arr = new T[capacity];
 		for (size_t i = 0; i < position; ++i) {
-            new (new_arr + i) T(std::move(arr[i]));
-            arr[i].~T();
-        }
-		
-		new (new_arr + position) T(value);
-		
-		for (size_t i = position; i < size; i++) {
-			new (new_arr + i + 1) T(std::move(arr[i]));
-			arr[i].~T();
+			new_arr[i] = arr[i];
 		}
 		
-		operator delete(arr);
+		new_arr[position] = value;
+		
+		for (size_t i = position + 1; i < size; i++) {
+			new_arr[i] = arr[i - 1];
+		}
+		
+		delete[] arr;
 		arr = new_arr;
 	} else {
 		for (size_t i = position + 1; i < size; ++i) {
-            new (arr + i) T(std::move(arr[i - 1]));
-            arr[i - 1].~T();
-        }
-		new (arr + position) T(value);
+			arr[i] = arr[i - 1];
+		}
+		arr[position] = value;
 	}
 	size++;
 	return true;
-}		
-	
+}    
+  
 template<typename T>
 void Vector<T>::print() const noexcept {
 	for (size_t i = 0; i < size; i++) { 
@@ -88,47 +80,50 @@ template<typename T>
 void Vector<T>::push_back(const T& value) {
 	if (size + 1 > capacity) {
 		if (capacity == 0){
-			capacity = 1;
-		} else {			
-			capacity *= 2;
+		  capacity = 1;
+		} else {      
+		  capacity *= 2;
 		}
 		
-		T* new_arr = static_cast<T*>(operator new(capacity * sizeof(T)));
+		T* new_arr = new T[capacity];
 		for (size_t i = 0; i < size; ++i) {
-            new (new_arr + i) T(std::move(arr[i]));
-            arr[i].~T();
-        }
+			new_arr[i] = arr[i];
+		}
 		
-		operator delete(arr);
+		delete[] arr;
 		arr = new_arr;
 	}
-	new (arr + size) T(value);
+	arr[size] = value;
 	size++;
 }
 
 template<typename T>
-bool Vector<T>::remove_first(const T& value) {
+bool Vector<T>::remove_first(const T& value) {	
 	size_t position = 0;
 	for (size_t i = 0; i < size; i++) {
 		if (arr[i] == value){
 			position = i;
-
-			for (size_t i = 0; i < position; ++i) {
-				new (arr + i) T(std::move(arr[i]));
-				arr[i].~T();
+		
+			// Укорачивание хвоста при некотором условии
+			if (capacity - size - 1 > 1000) {
+				capacity = size + 500;
 			}
-			
-			arr[size - 1].~T();
+			T* new_arr = new T[capacity];
+			for (size_t i = 0; i < position; ++i) {
+				new_arr[i] = arr[i];
+			}
+	
 			size--;
 			
 			for (size_t i = position; i < size; ++i) {
-				new (arr + i) T(std::move(arr[i]));
-				arr[i].~T();
+				new_arr[i] = arr[i + 1];
 			}
 			
+			delete[] arr;
+			arr = new_arr;
 			return true;
 		}
 	}
-	return false;
-	
+	return false; 
 }
+	

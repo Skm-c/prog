@@ -51,9 +51,13 @@ void DoublyLinkedList<T>::print() const noexcept {
 template<typename T>
 void DoublyLinkedList<T>::push_back(const T& value) {
 	Node* current = new Node(value);
-	end->next = current;
-	current->prev = end;
-	end = current;
+	if (begin == nullptr) {
+		begin = end = current;
+	} else {		
+		end->next = current;
+		current->prev = end;
+		end = current;
+	}
 }
 
 template<typename T>

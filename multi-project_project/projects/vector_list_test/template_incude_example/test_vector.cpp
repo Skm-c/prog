@@ -26,7 +26,6 @@ TEST(VectorTest, Remove) {
 	EXPECT_EQ(v.get_size(), 3);
 	
 	v.remove_first(2);
-	
     EXPECT_EQ(v.get_size(), 2);
 }
 
