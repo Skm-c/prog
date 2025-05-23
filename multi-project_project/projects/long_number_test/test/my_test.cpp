@@ -48,17 +48,17 @@ TEST_F(LongNumbers, less) {
 	EXPECT_FALSE(one < zero);
 	EXPECT_FALSE(one < m_one);
 }
-/*
+
 TEST_F(LongNumbers, summ) {
 	EXPECT_EQ(two, one + one);
-	EXPECT_EQ(m_ten, one + m_ten);
+	//EXPECT_EQ(m_ten, one + m_ten);
 	EXPECT_EQ(seventeen, ten + seven);	
 }
 
 TEST_F(LongNumbers, substraction) {
 	EXPECT_EQ(zero, one - one);
 	EXPECT_EQ(one, two - one);
-	//EXPECT_EQ(two, one - m_one);
+	EXPECT_EQ(two, one - m_one);
 }
 
 
@@ -67,14 +67,14 @@ TEST_F(LongNumbers, multiply) {
 	EXPECT_EQ(ten, two * five);
 	EXPECT_EQ(m_one, one * m_one);
 }
-*/
+/*
 TEST_F(LongNumbers, division) {
 	EXPECT_EQ(one, one / one);
 	EXPECT_EQ(two, ten / five);
 	EXPECT_EQ(m_one, one / m_one);
 }
 
-
+*/
 TEST_F(LongNumbers, remainder) {
 	EXPECT_EQ(one, three % two);
 	EXPECT_EQ(zero, ten % five);

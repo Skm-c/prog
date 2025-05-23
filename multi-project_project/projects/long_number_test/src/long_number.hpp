@@ -46,5 +46,6 @@ namespace biv {
 			
 		private:
 			int get_length(const char* const str) const noexcept;
+			void remove_leading_zeros();
 	};
 }
