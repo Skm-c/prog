@@ -222,10 +222,11 @@ LongNumber LongNumber::operator + (const LongNumber& x) const {
 }
 
 LongNumber LongNumber::operator - (const LongNumber& x) const {
+	std::cout << x.numbers[0] << x.numbers[1] << std::endl;
 	if (sign == 1 && x.sign == 1){
 		
 		size_t maxLen = std::max(length, x.length);
-		
+		std::cout << maxLen << std::endl;
 		//adding zeros to the beginning of 1 array
 		int* numbers1 = new int[maxLen]{};
 		int i = 0;
@@ -287,7 +288,7 @@ LongNumber LongNumber::operator - (const LongNumber& x) const {
 		}
 		
 		res.remove_leading_zeros();
-		
+		std::cout << res.numbers[0] <<' ' << res.numbers[1] <<' ' << res.numbers[2] << std::endl;
 		return res;
 		/*
 		std::cout << res.numbers[0] << res.numbers[1] << std::endl;
