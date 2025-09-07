@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <math.h>
+
 #define mapWidth 80
 #define mapHeight 25
 
@@ -34,10 +36,18 @@ void SetObjectPos (TObject *obj, float xPos, float yPos)
 
 }
 
+void PutObjectOnMap (TObject obj)
+{
+    int ix = (int)round(obj.x);
+    int iy = (int)round(obj.y);
+    map[iy][ix] = '0';
+}
 
 int main()
 {
+    SetObjectPos(&mario, 20, 10);
     ClearMap();
+    PutObjectOnMap(mario);
     ShowMap();    
     return 0;
 }
