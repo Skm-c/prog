@@ -4,7 +4,12 @@
 #define mapWidth 80
 #define mapHeight 25
 
+typedef struct SObject {
+    float x,y;
+} TObject;
+
 char map [mapHeight][mapWidth+1];
+TObject mario;
 
 void ClearMap ()
 {
@@ -21,6 +26,14 @@ void ShowMap ()
     for (int j = 0; j < mapHeight; j++)
         printf("%s", map[j]);
 }
+
+void SetObjectPos (TObject *obj, float xPos, float yPos)
+{
+    (*obj).x = xPos;
+    (*obj).y = yPos;
+
+}
+
 
 int main()
 {
