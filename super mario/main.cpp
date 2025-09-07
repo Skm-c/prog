@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include <math.h>
+#include <windows.h>
 
 #define mapWidth 80
 #define mapHeight 25
@@ -20,7 +21,7 @@ void ClearMap ()
         map[0][i] = '.';
     map[0][mapWidth] = '\0';
     for (int j = 1; j < mapHeight; j++)
-        sprintf( map[j], map[0]);
+        sprintf(map[j], map[0]);
 }
 
 void ShowMap ()
@@ -57,11 +58,26 @@ void PutObjectOnMap (TObject obj)
             map[j][i] = '0';
 }
 
+void setCur(int x, int y)
+{
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
 int main()
 {
     InitObject(&mario, 39, 10, 3, 3);
-    ClearMap();
-    PutObjectOnMap(mario);
-    ShowMap();    
+
+    do
+    {
+        ClearMap();
+        PutObjectOnMap(mario);
+
+        setCur(0,0);
+        ShowMap();  
+    }
+    while (GetKeyState(VK_ESCAPE) >= 0);   
     return 0;
 }
