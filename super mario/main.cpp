@@ -15,6 +15,7 @@ typedef struct SObject {
 
 char map [mapHeight][mapWidth+1];
 TObject mario;
+TObject brick[1];
 
 void ClearMap ()
 {
@@ -47,10 +48,17 @@ void InitObject(TObject *obj, float xPos, float yPos, float oWidth, float oHeigh
     (*obj).vertSpeed = 0;
 }
 
+BOOL IsCollision(TObject o1, TObject o2);
+
 void VertMoveObject(TObject *obj)
 {
     (*obj).vertSpeed += 0.05;
     SetObjectPos(obj, (*obj).x, (*obj).y + (*obj).vertSpeed);
+    if (IsCollision(*obj, brick[0]))
+    {
+        (*obj).y -= (*obj).vertSpeed;
+        (*obj).vertSpeed = 0;
+    }
 }
 
 BOOL IsPosInMap (int x, int y)
@@ -79,14 +87,22 @@ void setCur(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+BOOL IsCollision(TObject o1, TObject o2)
+{
+    return ((o1.x + o1.width) > o2.x) && (o1.x < (o2.x + o2.width)) &&
+        ((o1.y + o1.height) > o2.y) && (o1.y < (o2.y + o2.height));
+}
+
 int main()
 {
     InitObject(&mario, 39, 10, 3, 3);
+    InitObject(brick, 20, 20, 40, 5);
 
     do
     {
         ClearMap();
         VertMoveObject(&mario);
+        PutObjectOnMap(brick[0]);
         PutObjectOnMap(mario);
 
         setCur(0,0);
