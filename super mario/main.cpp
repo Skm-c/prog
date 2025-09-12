@@ -16,7 +16,8 @@ typedef struct SObject {
 
 char map [mapHeight][mapWidth+1];
 TObject mario;
-TObject brick[1];
+TObject *brick = NULL;
+int brickLength;
 
 void ClearMap ()
 {
@@ -56,18 +57,17 @@ void VertMoveObject(TObject *obj)
     (*obj).IsFly = TRUE;
     (*obj).vertSpeed += 0.05;
     SetObjectPos(obj, (*obj).x, (*obj).y + (*obj).vertSpeed);
-    if (IsCollision(*obj, brick[0]))
-    {
-        (*obj).y -= (*obj).vertSpeed;
-        (*obj).vertSpeed = 0;
-        (*obj).IsFly = FALSE;
-    }
+    
+    for (int i = 0; i < brickLength; i++)
+        if (IsCollision(*obj, brick[i]))
+        {
+            (*obj).y -= (*obj).vertSpeed;
+            (*obj).vertSpeed = 0;
+            (*obj).IsFly = FALSE;
+            break;
+        }
 }
 
-void HorizonMoveMap(float dx)
-{
-    brick[0].x += dx;
-}
 
 BOOL IsPosInMap (int x, int y)
 {
@@ -95,26 +95,55 @@ void setCur(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+void HorizonMoveMap(float dx)
+{
+    mario.x -= dx;
+    for (int i = 0; i < brickLength; i++)
+        if (IsCollision(mario, brick[i]))
+        {
+            mario.x += dx;
+            return;
+        }
+    mario.x += dx;
+
+    for (int i = 0; i < brickLength; i++)
+        brick[i].x += dx;
+}
+
 BOOL IsCollision(TObject o1, TObject o2)
 {
     return ((o1.x + o1.width) > o2.x) && (o1.x < (o2.x + o2.width)) &&
         ((o1.y + o1.height) > o2.y) && (o1.y < (o2.y + o2.height));
 }
 
-int main()
+void CreateLevel()
 {
     InitObject(&mario, 39, 10, 3, 3);
-    InitObject(brick, 20, 20, 40, 5);
+
+    brickLength = 5;
+    brick = static_cast<TObject*>(malloc(sizeof(*brick) * brickLength));
+    InitObject(brick+0, 20, 20, 40, 5);
+    InitObject(brick+1, 60, 15, 10, 10);
+    InitObject(brick+2, 80, 20, 20, 5);
+    InitObject(brick+3, 120, 15, 10, 10);
+    InitObject(brick+4, 150, 20, 40, 5);    
+}
+
+int main()
+{
+    CreateLevel();
 
     do
     {  
         ClearMap();
            
-        if ((mario.IsFly == FALSE) && (GetKeyState(VK_SPACE) < 0)) mario.vertSpeed = -0.7;
+        if ((mario.IsFly == FALSE) && (GetKeyState(VK_SPACE) < 0)) mario.vertSpeed = -0.8;
         if (GetKeyState('A') < 0) HorizonMoveMap(1);
         if (GetKeyState('D') < 0) HorizonMoveMap(-1);
 
         VertMoveObject(&mario);
+        for (int i = 0; i < brickLength; i++)
+            PutObjectOnMap(brick[i]);
         PutObjectOnMap(brick[0]);
         PutObjectOnMap(mario);
 
