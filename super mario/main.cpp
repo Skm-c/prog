@@ -64,6 +64,11 @@ void VertMoveObject(TObject *obj)
     }
 }
 
+void HorizonMoveMap(float dx)
+{
+    brick[0].x += dx;
+}
+
 BOOL IsPosInMap (int x, int y)
 {
     return ( (x >= 0) && (x < mapWidth) && (y >= 0) && (y < mapHeight)); 
@@ -106,6 +111,8 @@ int main()
         ClearMap();
            
         if ((mario.IsFly == FALSE) && (GetKeyState(VK_SPACE) < 0)) mario.vertSpeed = -0.7;
+        if (GetKeyState('A') < 0) HorizonMoveMap(1);
+        if (GetKeyState('D') < 0) HorizonMoveMap(-1);
 
         VertMoveObject(&mario);
         PutObjectOnMap(brick[0]);
